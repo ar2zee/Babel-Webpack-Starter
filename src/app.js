@@ -1,13 +1,27 @@
-import { person, sayHello } from './lib';
+import React, { Component } from 'react';
+import { Link, Route } from 'react-router-dom';
 
-// console.log(person.name);
+import Users from './containers/Users';
+import asyncComponent from './hoc/asyncComponent';
 
-// console.log(sayHello('Brad'))
+const AsyncPizza = asyncComponent(() => {
+    return import('./containers/Pizza.js');
+});
 
-async function getPosts() {
-	const response = await fetch('https://jsonplaceholder.typicode.com/posts');
-	const data = await response.json();
-	return data;
+class App extends Component {
+    render () {
+        return (
+            <div>
+                <div>
+                    <Link to="/">Users</Link> | <Link to="/pizza">Pizza</Link>
+                </div>
+                <div>
+                    <Route path="/" exact component={Users} />
+                    <Route path="/pizza" component={AsyncPizza} />
+                </div>
+            </div>
+        );
+    }
 }
 
-getPosts().then(posts => console.log(posts))
+export default App;
